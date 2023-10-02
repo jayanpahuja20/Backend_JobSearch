@@ -9,3 +9,5 @@ scikit-learn
 seaborn
 opencv-python
 torchvision
+fastapi
+pymongo
