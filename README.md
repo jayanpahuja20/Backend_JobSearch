@@ -8,5 +8,4 @@ Team Members:
 - Jayan Pahuja (jayan20071@iiitd.ac.in)
 - Yashika Singh (yashika20161@iiitd.ac.in)
 
-About the Project:
 
