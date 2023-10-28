@@ -33,8 +33,6 @@ def job_search_results(query_dict: Dict[str, Any]):
                         flag = False
                         break
                     query_for_db[enum_val.value] = query_dict["" + enum_val.name]
-        
-            
             
             if flag:
                 collection = db[collection_name]

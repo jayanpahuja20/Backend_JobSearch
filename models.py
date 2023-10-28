@@ -94,6 +94,17 @@ class CompanyMappingDS2(Enum):
     current_employees: Final = "current employee estimate"
     total_employees: Final = "total employee estimate"
 
+class JobMappingNewJob(Enum):
+    title: Final = "title"
+    company_name: Final = "company_name"
+    location: Final = "location"
+    salary: Final = "salary"
+    eligibility: Final = "eligibility"
+    description: Final = "description"
+    industry: Final = "industry"
+    link: Final = "link"
+    date_posted: Final = "date_posted"
+    employment_type: Final = "employment_type"
 
 class DataBaseMapModel(BaseModel):
     job: Final = "Jobs"
@@ -103,5 +114,9 @@ job_col_mappings = {
     "Kaggle_S1": JobMappingKaggleS1,
     "Github_S2": JobMappingGithubS2,
     "Kaggle_S3": JobMappingKaggleS3,
-    "Github_S4": JobMappingGithubS4
+    "Github_S4": JobMappingGithubS4,
+    "New_Jobs": JobMappingNewJob
 }
+
+
+
