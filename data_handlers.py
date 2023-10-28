@@ -8,7 +8,7 @@ from bson import ObjectId, json_util
 import json
 
 connection_string = "mongodb+srv://jayan20071:jayanpahuja123@jobsearch.y4tc9qr.mongodb.net/"
-
+newconnection = "mongodb+srv://admin:weloveIIA@jobs.dohb4ca.mongodb.net/"
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -85,7 +85,14 @@ def company_search_results(query_dict: Dict[str, Any]):
         print("Error:", str(e))
         return []
 
+def job_addition(query_dict: Dict[str, Any]):
+    client = MongoClient(newconnection)
+    db = client['Jobs'] 
+    collection = db['NewJobs']
 
+    result = collection.insert_one(query_dict)
+    print(result)
+    return []
 if __name__ == "__main__":
     query = {"company_name": "CyberCoders", "title": "Senior Data Engineer"}
     database_name = "Jobs"
