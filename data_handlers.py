@@ -7,6 +7,11 @@ from models import JobMappingGithubS2, JobMappingKaggleS1, JobMappingGithubS4, J
 from bson import ObjectId, json_util
 import json
 
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import linear_kernel
+from fuzzywuzzy import fuzz
+
 connection_string = "mongodb+srv://jayan20071:jayanpahuja123@jobsearch.y4tc9qr.mongodb.net/"
 newconnection = "mongodb+srv://admin:weloveIIA@jobs.dohb4ca.mongodb.net/"
 
@@ -108,3 +113,44 @@ if __name__ == "__main__":
 
     collection_keys = ["Github_S2", "Github_S4", "Kaggle_S1", "Kaggle_S3"]
     query_result = job_search_results(database_name)
+
+def entity_matching(query, table, threshold_tfidf=0.5, threshold_fuzzy=60):
+
+    # Create a 'text' column in the table by concatenating selected columns
+    table['text'] = table.apply(lambda row: ' '.join(row.astype(str)), axis=1)
+    
+    # Convert the query dictionary into a Pandas DataFrame with a single row
+    query_df = pd.DataFrame([query])
+    
+    # Preprocess the data to handle missing values and ensure they are represented as strings
+    query_df = query_df.fillna('')
+    query_df['text'] = query_df.apply(lambda row: ' '.join(row.astype(str)), axis=1)
+    
+    # Create TF-IDF vectorizers
+    tfidf_vectorizer = TfidfVectorizer()
+    
+    # Fit and transform the text data in the table
+    tfidf_matrix_table = tfidf_vectorizer.fit_transform(table['text'])
+    
+    # Transform the text data in the query
+    tfidf_matrix_query = tfidf_vectorizer.transform(query_df['text'])
+    
+    # Compute the cosine similarities between the query and table using TF-IDF
+    cosine_sim = linear_kernel(tfidf_matrix_query, tfidf_matrix_table)
+    
+    # Create an empty list to store matching rows
+    matching_rows = []
+    
+    # Iterate through the similarity matrix and apply FuzzyWuzzy matching
+    for i in range(len(cosine_sim[0])):
+        similarity_tfidf = cosine_sim[0][i]
+        if similarity_tfidf > threshold_tfidf:
+            name_query = query['name']
+            name_table = table.iloc[i]['name']
+            # Use FuzzyWuzzy to compare 
+            name_similarity = fuzz.token_sort_ratio(name_query, name_table)
+            if name_similarity > threshold_fuzzy:
+                matching_rows.append((i, similarity_tfidf, name_similarity))
+    
+    # Return the matching rows
+    return bool(matching_rows)
