@@ -6,7 +6,7 @@ import pandas
 from fastapi import FastAPI
 import uvicorn
 from models import JobMappingGithubS2, JobMappingKaggleS1, JobMappingGithubS4, JobMappingKaggleS3, \
-    SearchJobRequestModel, CompanyMappingDS2, SearchCompanyRequestModel
+    SearchJobRequestModel, CompanyMappingDS2, SearchCompanyRequestModel, job_col_mappings
 from data_handlers import job_search_results,company_search_results
 
 app = FastAPI()

@@ -2,7 +2,7 @@ from typing import Dict, Union, Type, Any
 
 from pymongo import MongoClient
 from models import JobMappingGithubS2, JobMappingKaggleS1, JobMappingGithubS4, JobMappingKaggleS3, \
-    SearchJobRequestModel, CompanyMappingDS2, SearchCompanyRequestModel, DataBaseMapModel
+    SearchJobRequestModel, CompanyMappingDS2, SearchCompanyRequestModel, DataBaseMapModel, job_col_mappings
 
 from bson import ObjectId, json_util
 import json
@@ -26,36 +26,16 @@ def job_search_results(query_dict: Dict[str, Any]):
             flag = True
             query_for_db = {}
             collection_name = key
-            if key == "Kaggle_S1":
-                for enum_val in JobMappingKaggleS1:
-                    if ("" + enum_val.name) in query_dict.keys():
-                        if enum_val.value == "":
-                            flag = False
-                            break
-                        query_for_db[enum_val.value] = query_dict["" + enum_val.name]
-            elif key == "Github_S2":
-                for enum_val in JobMappingGithubS2:
-                    if ("" + enum_val.name) in query_dict.keys():
-                        if enum_val.value == "":
-                            flag = False
-                            break
-                        query_for_db[enum_val.value] = query_dict["" + enum_val.name]
-            elif key == "Kaggle_S3":
-                for enum_val in JobMappingKaggleS3:
-                    if ("" + enum_val.name) in query_dict.keys():
-                        if enum_val.value == "":
-                            flag = False
-                            break
-                        query_for_db[enum_val.value] = query_dict["" + enum_val.name]
-            elif key == "Github_S4":
-                for enum_val in JobMappingGithubS4:
-                    if ("" + enum_val.name) in query_dict.keys():
-                        if enum_val.value == "":
-                            flag = False
-                            break
-                        query_for_db[enum_val.value] = query_dict["" + enum_val.name]
-            # print(query_dict)
-            # print(query_for_db)
+            
+            for enum_val in job_col_mappings[key]:
+                if ("" + enum_val.name) in query_dict.keys():
+                    if enum_val.value == "":
+                        flag = False
+                        break
+                    query_for_db[enum_val.value] = query_dict["" + enum_val.name]
+        
+            
+            
             if flag:
                 collection = db[collection_name]
                 results = list(collection.find(query_for_db))

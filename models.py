@@ -99,3 +99,9 @@ class DataBaseMapModel(BaseModel):
     job: Final = "Jobs"
     company: Final = "Companies"
 
+job_col_mappings = {
+    "Kaggle_S1": JobMappingKaggleS1,
+    "Github_S2": JobMappingGithubS2,
+    "Kaggle_S3": JobMappingKaggleS3,
+    "Github_S4": JobMappingGithubS4
+}
