@@ -61,9 +61,10 @@ class JobMappingGithubS2(Enum):
     company_name: Final = "company"
     location: Final = "location"
     salary: Final = "salary"
-    eligibility: Final = "months_experience, education, Seniority level"
+    #eligibility: Final = "months_experience, education, Seniority level"
+    eligibility: Final = "months_experience"
     description: Final = "description"
-    industry: Final = "job_function"
+    industry: Final = "Job function"
     link: Final = "post_url"
     date_posted: Final = ""
     employment_type: Final = "Employment type"
@@ -85,12 +86,12 @@ class JobMappingGithubS4(Enum):
 class CompanyMappingDS2(Enum):
     name: Final = "name"
     domain: Final = "domain"
-    year_founded: Final = "year_founded"
+    year_founded: Final = "year founded"
     industry: Final = "industry"
-    size_range: Final = "size_range"
+    size_range: Final = "size range"
     locality: Final = "locality"
     country: Final = "country"
-    linkedin_url: Final = "linkedin_url"
+    linkedin_url: Final = "linkedin url"
     current_employees: Final = "current employee estimate"
     total_employees: Final = "total employee estimate"
 
@@ -115,8 +116,15 @@ job_col_mappings = {
     "Github_S2": JobMappingGithubS2,
     "Kaggle_S3": JobMappingKaggleS3,
     "Github_S4": JobMappingGithubS4,
-    "New_Jobs": JobMappingNewJob
+    "NewJobs": JobMappingNewJob
 }
 
 
-
+DB_Class_Mappings = {
+    "Kaggle_S1": JobMappingKaggleS1,
+    "Github_S2": JobMappingGithubS2,
+    "Kaggle_S3": JobMappingKaggleS3,
+    "Github_S4": JobMappingGithubS4,
+    "NewJobs": JobMappingNewJob,
+    "DS_2" : CompanyMappingDS2
+}
