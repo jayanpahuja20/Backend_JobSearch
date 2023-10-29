@@ -61,7 +61,6 @@ class JobMappingGithubS2(Enum):
     company_name: Final = "company"
     location: Final = "location"
     salary: Final = "salary"
-    #eligibility: Final = "months_experience, education, Seniority level"
     eligibility: Final = "months_experience"
     description: Final = "description"
     industry: Final = "Job function"
@@ -73,7 +72,7 @@ class JobMappingGithubS2(Enum):
 class JobMappingGithubS4(Enum):
     title: Final = "job_title"
     company_name: Final = "company_name"
-    location: Final = "city, state, geo"
+    location: Final = "city"
     salary: Final = "salary_offered"
     eligibility: Final = ""
     description: Final = "job_description"
@@ -95,6 +94,7 @@ class CompanyMappingDS2(Enum):
     current_employees: Final = "current employee estimate"
     total_employees: Final = "total employee estimate"
 
+
 class JobMappingNewJob(Enum):
     title: Final = "title"
     company_name: Final = "company_name"
@@ -107,9 +107,11 @@ class JobMappingNewJob(Enum):
     date_posted: Final = "date_posted"
     employment_type: Final = "employment_type"
 
+
 class DataBaseMapModel(BaseModel):
     job: Final = "Jobs"
     company: Final = "Companies"
+
 
 job_col_mappings = {
     "Kaggle_S1": JobMappingKaggleS1,
@@ -119,12 +121,18 @@ job_col_mappings = {
     "NewJobs": JobMappingNewJob
 }
 
-
 DB_Class_Mappings = {
     "Kaggle_S1": JobMappingKaggleS1,
     "Github_S2": JobMappingGithubS2,
     "Kaggle_S3": JobMappingKaggleS3,
     "Github_S4": JobMappingGithubS4,
     "NewJobs": JobMappingNewJob,
-    "DS_2" : CompanyMappingDS2
+    "DS_2": CompanyMappingDS2
 }
+
+
+class DBMapping(str, Enum):
+    DB_1: Final = "Kaggle_S1"
+    DB_2: Final = "Github_S2"
+    DB_3: Final = "Kaggle_S3"
+    DB_4: Final = "Github_S4"
