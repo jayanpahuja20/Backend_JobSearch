@@ -67,7 +67,7 @@ def DB_Match(query , DB_Name ):
     return False  
  
         
-def entity_matching (row1 , row2, threshold_tfidf=0.5, threshold_fuzzy=60):
+def entity_matching (row1 , row2, threshold_tfidf=0.5, threshold_fuzzy=50):
     if(not(row1) or not(row2)):
         return False
     
@@ -92,21 +92,43 @@ def entity_matching (row1 , row2, threshold_tfidf=0.5, threshold_fuzzy=60):
     cosine_sim = linear_kernel(tfidf_matrix_query, tfidf_matrix_table)
     
     # Create an empty list to store matching rows
-    matching_rows = []
+    avg_similarity = 0
+
+    for key_query, value_query in row1.items():
+        key_table = key_query
+        value_table = row2.get(key_query, "")
+        
+        # Use FuzzyWuzzy to compare values
+        value_similarity = fuzz.token_sort_ratio(str(value_query), str(value_table))
+        avg_similarity += value_similarity
+        print(cosine_sim[0][0])
+        print(value_similarity)
+        if cosine_sim[0][0] < threshold_tfidf:
+            break  # Exit the loop as soon as one pair falls below either threshold
+
+    avg_similarity = avg_similarity/len(row1)
+
+    # Check if all key-value pairs meet the thresholds
+    if avg_similarity>=threshold_fuzzy:
+        return True
+        
+    return False
     
-    # Iterate through the similarity matrix and apply FuzzyWuzzy matching
-    for i in range(len(cosine_sim[0])):
-        similarity_tfidf = cosine_sim[0][i]
-        if similarity_tfidf > threshold_tfidf:
-            key_query, value_query = row1.popitem()
-            key_table, value_table = row2.popitem()
-            # Use FuzzyWuzzy to compare 
-            value_similarity = fuzz.token_sort_ratio(value_query, value_table)
-            if value_similarity > threshold_fuzzy:
-                matching_rows.append((key_query, value_query, key_table, value_table, similarity_tfidf, value_similarity))
+    # # Iterate through the similarity matrix and apply FuzzyWuzzy matching
+    # for i in range(len(cosine_sim[0])):
+    #     similarity_tfidf = cosine_sim[0][i]
+    #     if similarity_tfidf > threshold_tfidf:
+    #         key_query, value_query = row1.popitem()
+    #         key_table, value_table = row2.popitem()
+    #         # Use FuzzyWuzzy to compare 
+    #         value_similarity = fuzz.token_sort_ratio(value_query, value_table)
+    #         if value_similarity < threshold_fuzzy:
+    #             break
+
+    # matching_rows.append((key_query, value_query, key_table, value_table, similarity_tfidf, value_similarity))
     
-    # Return the matching rows
-    return bool(matching_rows)
+    # # Return the matching rows
+    # return bool(matching_rows)
 
 
 def entity_matching_old(query, table, threshold_tfidf=0.5, threshold_fuzzy=60):
