@@ -67,18 +67,26 @@ def DB_Match(query , DB_Name ):
     return False  
  
         
-
-def entity_matching (string1 , string2, threshold_tfidf=0.5, threshold_fuzzy=60):
-    if(not(string1) or not(string2)):
+def entity_matching (row1 , row2, threshold_tfidf=0.5, threshold_fuzzy=60):
+    if(not(row1) or not(row2)):
         return False
+    
+    # Convert dictionaries to DataFrames
+    df1 = pd.DataFrame([row1])
+    df2 = pd.DataFrame([row2])
+
+    # Create a 'text' column by concatenating values in each row
+    df1['text'] = df1.apply(lambda row: ' '.join(row.astype(str)), axis=1)
+    df2['text'] = df2.apply(lambda row: ' '.join(row.astype(str)), axis=1)
+
     # Create TF-IDF vectorizers
     tfidf_vectorizer = TfidfVectorizer()
     
     # Fit and transform the text data in the table
-    tfidf_matrix_table = tfidf_vectorizer.fit_transform(string1)
+    tfidf_matrix_table = tfidf_vectorizer.fit_transform(df2["text"])
     
     # Transform the text data in the query
-    tfidf_matrix_query = tfidf_vectorizer.transform(string2)
+    tfidf_matrix_query = tfidf_vectorizer.transform(df1["text"])
     
     # Compute the cosine similarities between the query and table using TF-IDF
     cosine_sim = linear_kernel(tfidf_matrix_query, tfidf_matrix_table)
@@ -90,16 +98,17 @@ def entity_matching (string1 , string2, threshold_tfidf=0.5, threshold_fuzzy=60)
     for i in range(len(cosine_sim[0])):
         similarity_tfidf = cosine_sim[0][i]
         if similarity_tfidf > threshold_tfidf:
-            name_query = string1
-            name_table = string2
+            key_query, value_query = row1.popitem()
+            key_table, value_table = row2.popitem()
             # Use FuzzyWuzzy to compare 
-            name_similarity = fuzz.token_sort_ratio(name_query, name_table)
-            if name_similarity > threshold_fuzzy:
-                matching_rows.append((i, similarity_tfidf, name_similarity))
-                return True
+            value_similarity = fuzz.token_sort_ratio(value_query, value_table)
+            if value_similarity > threshold_fuzzy:
+                matching_rows.append((key_query, value_query, key_table, value_table, similarity_tfidf, value_similarity))
     
     # Return the matching rows
-    return False
+    return bool(matching_rows)
+
+
 def entity_matching_old(query, table, threshold_tfidf=0.5, threshold_fuzzy=60):
     
     # Create a 'text' column in the table by concatenating selected columns
@@ -139,9 +148,9 @@ def entity_matching_old(query, table, threshold_tfidf=0.5, threshold_fuzzy=60):
                 matching_rows.append((i, similarity_tfidf, name_similarity))
     
     # Return the matching rows
-   
-    
     return bool(matching_rows)
+
+
 def entity_matching_for_search(query,results):
     if(not results):
         return False
@@ -149,6 +158,7 @@ def entity_matching_for_search(query,results):
         if(entity_matching(query,result)):
             return True
     return False
+
 def job_search_results(query_dict: Dict[str, Any]):
     try:
         final_results = []
