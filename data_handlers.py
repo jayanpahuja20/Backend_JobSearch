@@ -152,7 +152,7 @@ def entity_matching_for_search(query,results):
 def job_search_results(query_dict: Dict[str, Any]):
     try:
         final_results = []
-        for key in ["Kaggle_S1", "Github_S2", "Kaggle_S3", "Github_S4" , "New_Jobs"]:
+        for key in ["Kaggle_S1", "Github_S2", "Kaggle_S3", "Github_S4" , "NewJobs"]:
             flag = True
             query_for_db = {}
             collection_name = key
@@ -165,7 +165,7 @@ def job_search_results(query_dict: Dict[str, Any]):
                     query_for_db[enum_val.value] = query_dict["" + enum_val.name]
             
             if flag:
-                collection = DB_Match[collection_name]
+                collection = get_DB(collection_name)
                 results = list(collection.find(query_for_db))
                 if(not results):
                     continue
