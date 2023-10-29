@@ -38,6 +38,7 @@ def get_DB(DB_Name):
     client = MongoClient(connection_string)
     db = client[DataBaseMapModel.job]
     collection = db[DB_Name]
+    print('Hello')
     return collection
 
 
@@ -240,10 +241,11 @@ def delete_job_source(table_name: str) -> str:
 
 
 def delete_from_existing_table(query_dict: Dict[str, Any]):
-    for table_name in ['Kaggle_S1', 'Github_S2', 'Kaggle_S3', 'Github_S4']:
-        collection = get_DB(table_name)
-        print(table_name)
-        try:
+    try:
+        final_result = []
+        for table_name in ['Kaggle_S1', 'Github_S2', 'Kaggle_S3', 'Github_S4']:
+            collection = get_DB(table_name)
+            print(table_name)
             query_for_db = {}
             for enum_val in job_col_mappings[table_name]:
                 if ("" + enum_val.name) in query_dict.keys():
@@ -252,14 +254,19 @@ def delete_from_existing_table(query_dict: Dict[str, Any]):
                     else:
                         query_for_db[enum_val.value] = query_dict["" + enum_val.name]
             print(query_for_db)
-            result = collection.delete_many(query_for_db)
-            return result
+            records = collection.count_documents(query_for_db)
+            if records != 0:
+                result = collection.delete_many(query_for_db)
+                print(str(records) + "Record(s) deleted!")
+                final_result.append(result)
+            else:
+                result = []
+        return final_result
 
-        except Exception as e:
-            print("Error:", str(e))
-            return []
+    except Exception as e:
+        print("Error:", str(e))
+        return []
 
 
 if __name__ == "__main__":
-    # DB_Match("hlelo" ,"NewJobs"  )
     Database = get_DB("NewJobs")
