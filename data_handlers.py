@@ -38,15 +38,18 @@ def get_DB(DB_Name):
     return collection
 
 def Transform(DatasetName , query):
+    
     if(type(query)!=dict):
         query = query[0]
     Transformed={}
     for enum_val in DB_Class_Mappings[DatasetName]:
         if(enum_val.value==""):
-            print(enum_val.value)
             Transformed[enum_val.name] = ""
         else:
-            Transformed[enum_val.name] = query[enum_val.value]
+            if(enum_val.value not in query):
+                Transformed[enum_val.name]=""
+            else:
+                Transformed[enum_val.name] = query[enum_val.value]
     
     L = []
     L.append(Transformed)
@@ -198,10 +201,11 @@ def job_search_results(query_dict: Dict[str, Any]):
             
             if flag:
                 collection = get_DB(collection_name)
+                
                 results = list(collection.find(query_for_db))
                 if(not results):
                     continue
-                
+                print(collection_name)
                 results=Transform(key,results)
                 if(not entity_matching_for_search(results,final_results)):
                     final_results.extend(results)
