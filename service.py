@@ -95,9 +95,11 @@ async def dashboard(request: Request):
     print("Hello")
     name = request.query_params.get('name', '')
     email = request.query_params.get('email', '')
-    user_data=get_user_data(email)
-    print(user_data)
-    return templates.TemplateResponse("user_dashboard.html", context={"request": request, "name":name, "email":email})
+    user_data=get_user_data(email)[0]
+    # print(user_data)
+    location=user_data["location"]
+    experience=user_data["eligibility"]
+    return templates.TemplateResponse("user_dashboard.html", context={"request": request, "name":name, "email":email, "location":location, "experience":experience})
 
 # @app.get("/dashboard", response_class=HTMLResponse)
 # async def dashboard_call(request: Request):
