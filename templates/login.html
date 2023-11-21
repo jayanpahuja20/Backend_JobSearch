@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>LOGIN</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <style>
+            body {
+                background-color: #363636;
+                display: block;
+                justify-content: center;
+                height: 100vh; /* Ensure the body takes the full viewport height */
+            }
+            h1,h3   {
+                color: white;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+
+            }
+            p    
+            {
+                color: lightgray;
+                display: block;
+            }
+            form{
+                display: block;
+            }
+            .container{
+                width:30%;
+            }
+            </style>
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <h1 style="margin-top: 60px; margin-bottom: 20px;"> JOB SEARCH</h1>
+        <div class="container">
+            <form action="/dashboard" method="GET">
+                <h1 class="h3 mb-3 fw-normal" style="color: white;">Please sign in</h1>
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="first_name last_name" required>
+                    <label for="name">Full Name</label>
+                </div>
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                    <label for="email">Email address</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2">Sign in</button>
+            </form>
+        </div>
+        
+
+        <!-- <script type = "text/javascript">
+            function user_dashboard() {
+                var name=document.getElementById("name").value;
+                var email=document.getElementById("floatingInput email").value;
+                var curr=window.location.href;
+                var index=curr.lastIndexOf("/");
+                curr=curr.substring(0,index+1)+"dashboard";
+                // window.location.replace(curr);
+                console.log(curr);
+                data = {
+                    name: name,
+                    email: email, 
+                }
+                fetch(curr, {
+                    method: "GET",
+                    body: JSON.stringify(data),
+                    headers: {"Content-type": "application/json; charset=UTF-8"}
+                })
+
+            }
+        </script> -->
+    </body>
+</html>
+

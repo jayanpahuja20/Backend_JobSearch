@@ -267,6 +267,16 @@ def delete_from_existing_table(query_dict: Dict[str, Any]):
         print("Error:", str(e))
         return []
 
+def get_user_data(email):
+    print("Hello")
+    newconnection = "mongodb+srv://admin:weloveIIA@jobs.dohb4ca.mongodb.net/"
+    client = MongoClient(newconnection)
+    db = client["Jobs"]
+    DB_Name = "NewUsers"
+    collection = db[DB_Name]
+    cursor = list(collection.find({"Email":email}) )
+    return cursor
+
 
 if __name__ == "__main__":
-    Database = get_DB("NewJobs")
+    print(get_user_data("yashika20161@iiitd.ac.in"))

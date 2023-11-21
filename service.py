@@ -3,19 +3,22 @@ from typing import List, Dict, Any
 import matplotlib
 import numpy
 import pandas
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 import uvicorn
 from models import JobMappingGithubS2, JobMappingKaggleS1, JobMappingGithubS4, JobMappingKaggleS3, \
     SearchJobRequestModel, CompanyMappingDS2, SearchCompanyRequestModel, job_col_mappings, DBMapping
 from data_handlers import job_search_results, company_search_results, \
-    job_addition, job_addition_to_existing, delete_job_source, delete_from_existing_table
+    job_addition, job_addition_to_existing, delete_job_source, delete_from_existing_table, get_user_data
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
-
-@app.get("/")
-async def root():
-    return {"message": "Website is live. Please enter /docs to access the APIs"}
+@app.get("/",response_class=HTMLResponse)
+async def root(request: Request):
+    # return {"message": "Website is live. Please enter /docs to access the APIs"}
+    return templates.TemplateResponse("home.html",context={"request":request})
 
 
 @app.post("/v1/search/jobs")
@@ -49,6 +52,13 @@ async def add_job(add_job_request: SearchJobRequestModel) -> List[Dict[str, Any]
     return job_addition(query_dict)
 
 
+@app.post("/v1/add/new_job2")
+async def add_job2(add_job_request: SearchJobRequestModel) -> List[Dict[str, Any]]:
+    query_dict = dict(add_job_request)
+    print(query_dict)
+    return job_addition(query_dict)
+
+
 @app.post("/v1/add/new_job_existing_table")
 async def add_job(add_job_request: SearchJobRequestModel, table: DBMapping) -> List[Dict[str, Any]]:
     query_dict = dict(add_job_request)
@@ -71,6 +81,32 @@ async def delete_query(delete_request: SearchJobRequestModel) -> List[Dict[str, 
             new_query[keys] = query_dict[keys]
     print(new_query)
     return delete_from_existing_table(new_query)
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse("login.html", context={"request": request})
+
+@app.get("/signup", response_class=HTMLResponse)
+def signup_page(request: Request):
+    return templates.TemplateResponse("signup.html", context={"request": request})
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    print("Hello")
+    name = request.query_params.get('name', '')
+    email = request.query_params.get('email', '')
+    user_data=get_user_data(email)
+    print(user_data)
+    return templates.TemplateResponse("user_dashboard.html", context={"request": request, "name":name, "email":email})
+
+# @app.get("/dashboard", response_class=HTMLResponse)
+# async def dashboard_call(request: Request):
+#     data = await request.json()
+#     name = data.get('name', '')
+#     email = data.get('email', '')
+#     print(name)
+#     print(email)
+#     return templates.TemplateResponse("user_dashboard.html", context={"request": request})
 
 # {
 #   "_id": {
