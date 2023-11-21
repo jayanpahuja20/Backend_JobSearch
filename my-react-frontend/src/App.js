@@ -34,7 +34,7 @@ import React from 'react';
 // import { Switch } from 'react-router';
 import Home from './Home';
 import Login from './Login';
-// import Dashboard from './Dashboard';
+import Dashboard from './Dashboard';
 // import Header from './header';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -45,7 +45,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
