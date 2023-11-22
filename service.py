@@ -1,8 +1,6 @@
 from typing import List, Dict, Any
 
-import matplotlib
-import numpy
-import pandas
+import pandas as pd
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -101,37 +99,75 @@ async def dashboard(request: Request):
     experience=user_data["eligibility"]
     return templates.TemplateResponse("user_dashboard.html", context={"request": request, "name":name, "email":email, "location":location, "experience":experience})
 
-# @app.get("/dashboard", response_class=HTMLResponse)
-# async def dashboard_call(request: Request):
-#     data = await request.json()
-#     name = data.get('name', '')
-#     email = data.get('email', '')
-#     print(name)
-#     print(email)
-#     return templates.TemplateResponse("user_dashboard.html", context={"request": request})
+@app.get("/job_search", response_class=HTMLResponse)
+def jobSearch(request: Request):
+    return templates.TemplateResponse("JobSearch.html", context={"request": request})
 
-# {
-#   "_id": {
-#     "$oid": "650c2d4a8b1b1bc972dd91e2"
-#   },
-#   "job_ID": {
-#     "$numberLong": "3467802155"
-#   },
-#   "job": "Informatica Developer",
-#   "location": "Hyderabad, Telangana, India",
-#   "company_name": "Tata Consultancy Services",
-#   "work_type": "On-site",
-#   "full_time_remote": "Full-time · Mid-Senior level",
-#   "no_of_employ": "10,001+ employees · IT Services and IT Consulting",
-#   "no_of_application": 32,
-#   "posted_day_ago": "4 hours",
-#   "alumni": "10,073 company alumni",
-#   "Hiring_person": "Priyanka gupta",
-#   "linkedin_followers": "11,917,646 followers",
-#   "hiring_person_link": "https://www.linkedin.com/in/priyanka-gupta-47ba171b1",
-#   "job_details": "About the job Greetings from TATA Consultancy Services TCS is hiring for Informatica Developer Job Title: Informatica Developer Location: PAN India Experience Range: 2-6 Years Education: Minimum 15 Years of full time education(10th, 12th and Graduation) Job Description: TCS has always been in the spotlight for being adept in the next big technologies. What we can offer you is a space to explore varied technologies and quench your techie soul. Responsibilities: Good Knowledge in Data Warehouse and Database concepts.Expert in Informatica Power center concepts.Gather requirements to define data definitions, transformation logic, and data model logical and physical designs, data flow, and process.Design, develop, and test data processes per business requirements, following the development standards and best practices as well as participate in code peer reviews to ensure our applications comply with best practices.Work with business analysts to gather business requirements from end users and translate them into technical specifications.To be responsible for providing technical guidance / solutions.Provide estimates for development.Test solutions to validate whether requirements have been met; develop test plans, test scripts, and test conditions based on the business and system requirements. Skills: Experience in ETL development using Informatica PowerCenter, PowerCenter 9.x, 10.xExperience in Designing Extract Load Transform ETL solutions for data migration or data integrationExperience in Structure Query Language SQLStrong Informatica technical knowledge in the areas on Informatica Designer Components -Source Analyzer, Mapping Designer & Mapplet Designer, Transformation Developer, Workflow Manager, Workflow Monitor.Analyze, design, implement and test medium to complex mappings independently. Ability to design and implement easily scalable ETL componentsStrong SQL and related skills. Ability to develop and implement complex procedures and packages using Oracle PL/SQL.Experience in parameter file concepts.Experience in transformations like Source qualifier, joiners, union, aggregator, sorter, expression, transaction control, XML transformation, lookups, etcExperience with Informatica Advanced Techniques Dynamic Caching, Memory Management, Parallel Processing to increase Performance throughput"
-# }
+@app.get("/job_search_result",response_class=HTMLResponse)
+async def search_jobs( request: Request):
+   
+    new_query = {}
+    new_query["company_name"] = request.query_params.get('company_name', '')
+    new_query["title"] = request.query_params.get('title', '')
+    new_query["location"] = request.query_params.get('location', '')
+    new_query["salary"] = request.query_params.get('salary', '')
+    new_query["eligibility"] = request.query_params.get('eligibility', '')
+    new_query["description"] = request.query_params.get('description', '')
+    new_query["industry"] = request.query_params.get('industry', '')
+    new_query["link"] = request.query_params.get('link', '')
+    new_query["date_posted"] = request.query_params.get('date_posted', '')
+    new_query["employment_type"] = request.query_params.get('employment_type', '')
+    
+    #print(job_search_results(new_query))
+    df = pd.DataFrame.from_dict(job_search_results(new_query))
+    html = df.to_html( index=False, classes='stocktable', table_id='table1')
+    html = html.replace('class="dataframe ','class="')  
+  #  return templates.TemplateResponse("JobSearch.html", context={"request": request})
+    return templates.TemplateResponse("result.html", context={"request": request,"table":html})
+    
 
+@app.get("/company_search", response_class=HTMLResponse)
+def companySearch(request: Request):
+    return templates.TemplateResponse("CompanySearch.html", context={"request": request})
+@app.get("/company_search_result", response_class=HTMLResponse)
+async def search_companies( request: Request):
+   
+    new_query = {}
+    new_query["name"] = request.query_params.get('name', '')
+    new_query["domain"] = request.query_params.get('domain', '')
+    new_query["year_founded"] = request.query_params.get('year_founded', '')
+    new_query["industry"] = request.query_params.get('industry', '')
+    new_query["locality"] = request.query_params.get('locality', '')
+    new_query["country"] = request.query_params.get('country', '')
+    new_query["industry"] = request.query_params.get('industry', '')
+    new_query["linkedin_url"] = request.query_params.get('linkedin_url', '')
+    new_query["current_employees"] = request.query_params.get('current_employees', '')
+    new_query["total_employees"] = request.query_params.get('total_employees', '')
+    print(new_query)
+    
+    #print(job_search_results(new_query))
+    df = pd.DataFrame.from_dict(company_search_results(new_query))
+    html = df.to_html( index=False, classes='stocktable', table_id='table1')
+    html = html.replace('class="dataframe ','class="')  
+    #return templates.TemplateResponse("JobSearch.html", context={"request": request})
+    return templates.TemplateResponse("result.html", context={"request": request,"table":html})
+
+@app.get("/Recommended", response_class=HTMLResponse)
+def RecommendedSearch(request: Request):
+    print("Recommended Search")
+    email = "yashika20161@iiitd.ac.in"
+    user_data=get_user_data(email)[0]
+    # print(user_data)
+    new_query = {}
+    new_query['location']=user_data["location"]
+    new_query['eligibility']=user_data["eligibility"]
+    print("looking for error")
+    print(job_search_results(new_query))
+    df = pd.DataFrame.from_dict(job_search_results(new_query))
+    html = df.to_html( index=False, classes='stocktable', table_id='table1')
+    html = html.replace('class="dataframe ','class="')  
+    #return templates.TemplateResponse("JobSearch.html", context={"request": request})
+    return templates.TemplateResponse("result.html", context={"request": request,"table":html})
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
