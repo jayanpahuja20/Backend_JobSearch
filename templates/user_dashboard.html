@@ -55,14 +55,22 @@
             <form action="/Recommended"  method="get">
                 <input type="submit" value="Jobs Recommended For You" />
             </form>
-        {% endif %}
 
-        {% if name==admin %}
+        {% else %}
 
         <h1> WELCOME BACK ADMIN</h1>
+        <div class="button-container">
+        <form>
+            <button class="btn btn-primary rounded-pill px-3" type="button" onclick="opendocs()">PERFORM ADMIN FUNCTIONS</button>
+        </form>
+        </div>
 
         {% endif %}
-        
+        <script type = "text/javascript">
+            function opendocs() {
+                window.open("http://127.0.0.1:8000/docs");
+            }
+        </script>
         
     </body>
 </html>
