@@ -40,20 +40,28 @@
     </head>
     <body>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <h1> USER DASHBOARD</h1>
-        <h3> NAME: {{name}}</h3>
-        <h3> EMAIL: {{email}}</h3>
-        <h3> LOCATION: {{location}}</h3>
-        <h3> EXPERIENCE: {{experience}}</h3>
-        <form action="/job_search"  method="get">
-            <input type="submit" value="Search Jobs" />
-        </form>
-        <form action="/company_search"  method="get">
-            <input type="submit" value="Search Companies" />
-        </form>
-        <form action="/Recommended"  method="get">
-            <input type="submit" value="Jobs Recommended For You" />
-        </form>
+        {% if name!="admin" %}
+            <h1> USER DASHBOARD</h1>
+            <h3> NAME: {{name}}</h3>
+            <h3> EMAIL: {{email}}</h3>
+            <h3> LOCATION: {{location}}</h3>
+            <h3> EXPERIENCE: {{experience}}</h3>
+            <form action="/job_search"  method="get">
+                <input type="submit" value="Search Jobs" />
+            </form>
+            <form action="/company_search"  method="get">
+                <input type="submit" value="Search Companies" />
+            </form>
+            <form action="/Recommended"  method="get">
+                <input type="submit" value="Jobs Recommended For You" />
+            </form>
+        {% endif %}
+
+        {% if name==admin %}
+
+        <h1> WELCOME BACK ADMIN</h1>
+
+        {% endif %}
         
         
     </body>
