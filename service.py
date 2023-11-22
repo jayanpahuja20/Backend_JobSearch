@@ -155,15 +155,17 @@ async def search_companies( request: Request):
             return templates.TemplateResponse("result_company.html", context={"request": request})
     openings_list=[]
 
-    for i in range(0,len(res)):
-        job_query={}
-        job_query["company_name"]=res[i]["company_name"]
-        openings_list.append(ob_search_results(job_query))
-    df2 = pd.DataFrame.from_dict(openings_list)
+    # print(res)
+    # for i in range(0,len(res)):
+    #     job_query={}
+    #     job_query["company_name"]=res[i]["name"].capitalize()
+    #     # print(job_query)
+    #     openings_list.append(job_search_results(job_query))
+    # df2 = pd.DataFrame.from_dict(openings_list)
 
-    # job_query={}
-    # job_query["company_name"]=new_query["name"]
-    # df2 = pd.DataFrame.from_dict(job_search_results(job_query))
+    job_query={}
+    job_query["company_name"]=new_query["name"].capitalize()
+    df2 = pd.DataFrame.from_dict(job_search_results(job_query))
     if(df2.empty):
             return templates.TemplateResponse("result_company.html", context={"request": request,"company":html})
     html2 = df.to_html( index=False, classes='stocktable', table_id='result2')

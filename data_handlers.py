@@ -46,17 +46,19 @@ def Transform(DatasetName, query):
     if (type(query) != dict):
         query = query[0]
     Transformed = {}
+    
     for enum_val in DB_Class_Mappings[DatasetName]:
-        if (enum_val.value == ""):
-            print ( 'value ',enum_val.value)
+        if (enum_val.value == "" or (enum_val.value not in query)):
+           
             Transformed[enum_val.name] = ""
+       
+
         else:
             Transformed[enum_val.name] = query[enum_val.value]
 
     L = []
     L.append(Transformed)
     return L
-
 
 def DB_Match(query, DB_Name):
     Database = get_DB(DB_Name)
@@ -151,26 +153,36 @@ def job_search_results(query_dict: Dict[str, Any]):
                     query_for_db[enum_val.value] = query_dict["" + enum_val.name]
             
             if flag:
-                print('query ', query_for_db)
+
+                #print(query_for_db)
+                #results = find_query_in_database(query_for_db,collection_name)
                 collection = get_DB(collection_name)
-                print('collection ', collection)
                 results = list(collection.find(query_for_db))
-                print('res ', results)
+                
                 if not results:
                     continue
-
-                results = Transform(key, results)
-                print('res1 ', results)
+                newres=[]
+                for r in results:
+                    r = Transform(key, r)
+                    newres.append(r)
+                results=newres
+                
                 if not entity_matching_for_search(results, final_results):
                     final_results.extend(results)
                 else:
-                    print("Duplicate result")
+                    print("Duplicate result")
 
         for i in range(0, len(final_results)):
             dump = json.dumps(final_results[i], default=str)
             final_results[i] = json.loads(dump)
 
-        return final_results
+        display = []
+        for result in final_results:
+            result = result[0]
+            display.append(result)
+            
+        print(display)
+        return display
 
     except Exception as e:
         print("Error:", str(e))
@@ -211,7 +223,7 @@ def company_search_results(query_dict: Dict[str, Any]):
         for i in range(0, len(final_results)):
             dump = json.dumps(final_results[i], default=str)
             final_results[i] = json.loads(dump)
-      
+        
         return final_results
 
     except Exception as e:
