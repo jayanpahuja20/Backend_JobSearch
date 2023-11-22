@@ -99,11 +99,11 @@ async def dashboard(request: Request):
     experience=user_data["eligibility"]
     return templates.TemplateResponse("user_dashboard.html", context={"request": request, "name":name, "email":email, "location":location, "experience":experience})
 
-@app.get("/job_search", response_class=HTMLResponse)
+@app.get("/job_search", response_class=HTMLResponse, include_in_schema=False)
 def jobSearch(request: Request):
     return templates.TemplateResponse("JobSearch.html", context={"request": request})
 
-@app.get("/job_search_result",response_class=HTMLResponse)
+@app.get("/job_search_result",response_class=HTMLResponse, include_in_schema=False)
 async def search_jobs( request: Request):
    
     new_query = {}
@@ -126,10 +126,11 @@ async def search_jobs( request: Request):
     return templates.TemplateResponse("result.html", context={"request": request,"table":html})
     
 
-@app.get("/company_search", response_class=HTMLResponse)
+@app.get("/company_search", response_class=HTMLResponse, include_in_schema=False)
 def companySearch(request: Request):
     return templates.TemplateResponse("CompanySearch.html", context={"request": request})
-@app.get("/company_search_result", response_class=HTMLResponse)
+
+@app.get("/company_search_result", response_class=HTMLResponse, include_in_schema=False)
 async def search_companies( request: Request):
    
     new_query = {}
@@ -152,7 +153,7 @@ async def search_companies( request: Request):
     #return templates.TemplateResponse("JobSearch.html", context={"request": request})
     return templates.TemplateResponse("result.html", context={"request": request,"table":html})
 
-@app.get("/Recommended", response_class=HTMLResponse)
+@app.get("/Recommended", response_class=HTMLResponse, include_in_schema=False)
 def RecommendedSearch(request: Request):
     print("Recommended Search")
     email = "yashika20161@iiitd.ac.in"
