@@ -38,7 +38,7 @@ class JobMappingKaggleS1(Enum):
     eligibility: Final = ""
     description: Final = "job_details"
     industry: Final = "no_of_employ"
-    link: Final = "job_id"
+    link: Final = "job_ID"
     date_posted: Final = "posted_day_ago"
     employment_type: Final = "full_time_remote"
 

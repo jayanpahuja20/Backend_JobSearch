@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>LOGIN</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <style>
+            body {
+                background-color: #363636;
+                display: block;
+                justify-content: center;
+                height: 100vh; /* Ensure the body takes the full viewport height */
+            }
+            h1,h3   {
+                color: white;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+
+            }
+            p    
+            {
+                color: lightgray;
+                display: block;
+            }
+            form{
+                display: block;
+            }
+            .container{
+                width:30%;
+            }
+            </style>
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <h1 style="margin-top: 60px; margin-bottom: 20px;"> JOB SEARCH</h1>
+        <div class="container">
+        <form action="/company_search_result" method="get">
+            <h1 class="h3 mb-3 fw-normal" style="color: white;">Enter fields to search on</h1>
+        
+            <div class="form-floating">
+              <input type="text" class="form-control" name="name" id="name" placeholder="">
+              <label for="name">Company Name</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="domain" id="domain" placeholder="">
+                <label for="domain">Domain</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="year_founded" id="year_founded" placeholder="">
+                <label for="year_founded">Year Founded</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="industry" id="industry" placeholder="">
+                <label for="industry">Industry</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="locality" id="locality" placeholder="">
+                <label for="locality">Locality</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="country" id="country" placeholder="">
+                <label for="country">Country</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="linkedin_url" id="linkedin_url" placeholder="">
+                <label for="linkedin_url">linkedin_url</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="current_employees" id="current_employees" placeholder="">
+                <label for="current_employees">current_employees</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="total_employees" id="total_employees" placeholder="">
+                <label for="total_employees">Total Employees</label>
+            </div>
+           
+        
+            <button class="btn btn-primary w-100 py-2" type="submit">Search</button>
+
+          </form>
+        </div>
+    </body>
+</html>
+
