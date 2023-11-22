@@ -80,15 +80,15 @@ async def delete_query(delete_request: SearchJobRequestModel) -> List[Dict[str, 
     print(new_query)
     return delete_from_existing_table(new_query)
 
-@app.get("/login", response_class=HTMLResponse)
+@app.get("/login", response_class=HTMLResponse, include_in_schema=False)
 def login_page(request: Request):
     return templates.TemplateResponse("login.html", context={"request": request})
 
-@app.get("/signup", response_class=HTMLResponse)
+@app.get("/signup", response_class=HTMLResponse, include_in_schema=False)
 def signup_page(request: Request):
     return templates.TemplateResponse("signup.html", context={"request": request})
 
-@app.get("/dashboard", response_class=HTMLResponse)
+@app.get("/dashboard", response_class=HTMLResponse, include_in_schema=False)
 async def dashboard(request: Request):
     print("Hello")
     name = request.query_params.get('name', '')
