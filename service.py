@@ -148,19 +148,25 @@ async def search_companies( request: Request):
     
     #print(job_search_results(new_query))
     res=company_search_results(new_query)
-    print(res)
     df = pd.DataFrame.from_dict(res)
-    html = df.to_html( index=False, classes='stocktable', table_id='table1')
+    html = df.to_html( index=False, classes='stocktable', table_id='result')
     html = html.replace('class="dataframe ','class="')  
     if(df.empty):
-        return templates.TemplateResponse("result_company.html", context={"request": request})
+            return templates.TemplateResponse("result_company.html", context={"request": request})
+    openings_list=[]
 
-    job_query={}
-    job_query["company_name"]=new_query["name"]
-    df2 = pd.DataFrame.from_dict(job_search_results(job_query))
+    for i in range(0,len(res)):
+        job_query={}
+        job_query["company_name"]=res[i]["company_name"]
+        openings_list.append(ob_search_results(job_query))
+    df2 = pd.DataFrame.from_dict(openings_list)
+
+    # job_query={}
+    # job_query["company_name"]=new_query["name"]
+    # df2 = pd.DataFrame.from_dict(job_search_results(job_query))
     if(df2.empty):
             return templates.TemplateResponse("result_company.html", context={"request": request,"company":html})
-    html2 = df.to_html( index=False, classes='stocktable', table_id='table1')
+    html2 = df.to_html( index=False, classes='stocktable', table_id='result2')
     html2 = html.replace('class="dataframe ','class="')  
 
     return templates.TemplateResponse("result_company.html", context={"request": request,"company":html, "job":html2})
@@ -177,7 +183,7 @@ def RecommendedSearch(request: Request):
     print("looking for error")
     print(job_search_results(new_query))
     df = pd.DataFrame.from_dict(job_search_results(new_query))
-    html = df.to_html( index=False, classes='stocktable', table_id='table1')
+    html = df.to_html( index=False, classes='stocktable', table_id='result')
     html = html.replace('class="dataframe ','class="')  
     #return templates.TemplateResponse("JobSearch.html", context={"request": request})
     return templates.TemplateResponse("result.html", context={"request": request,"table":html})

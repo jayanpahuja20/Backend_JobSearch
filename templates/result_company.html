@@ -48,6 +48,42 @@
         {% else %}
         <p> Company information not available</p>
         {% endif %}
+
+        <script type = "text/javascript">
+            $(document).ready(function() {
+            $('#result').DataTable( {
+                dom: 'Bfrtip',
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: 'noVis'
+                    }
+                ],
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        columns: ':not(.noVis)'
+                    }
+                ]
+            } ),
+        $('#result2').DataTable( {
+                dom: 'Bfrtip',
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: 'noVis'
+                    }
+                ],
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        columns: ':not(.noVis)'
+                    }
+                ]
+            } );
+        } );
+        </script>
+
     </body>
 </html>
 
