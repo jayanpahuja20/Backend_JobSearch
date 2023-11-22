@@ -150,8 +150,18 @@ async def search_companies( request: Request):
     df = pd.DataFrame.from_dict(company_search_results(new_query))
     html = df.to_html( index=False, classes='stocktable', table_id='table1')
     html = html.replace('class="dataframe ','class="')  
-    #return templates.TemplateResponse("JobSearch.html", context={"request": request})
-    return templates.TemplateResponse("result.html", context={"request": request,"table":html})
+     if(df.empty):
+            return templates.TemplateResponse("result_company.html", context={"request": request})
+
+    job_query={}
+    job_query["company_name"]=new_query["name"]
+    df2 = pd.DataFrame.from_dict(job_search_results(job_query))
+    if(df2.empty):
+            return templates.TemplateResponse("result_company.html", context={"request": request,"company":html})
+    html2 = df.to_html( index=False, classes='stocktable', table_id='table1')
+    html2 = html.replace('class="dataframe ','class="')  
+
+    return templates.TemplateResponse("result_company.html", context={"request": request,"company":html, "job":html2})
 
 @app.get("/Recommended", response_class=HTMLResponse, include_in_schema=False)
 def RecommendedSearch(request: Request):

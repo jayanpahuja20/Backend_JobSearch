@@ -36,7 +36,17 @@
     </head>
     <body>
         <h1>RESULT OF THE QUERY</h1>
-        {{ table|safe }}
+        <h3>COMPANY DATA</h3>
+        {% if company is defined %}
+        {{  company |safe }}
+            <h3>JOB POSTINGS OF THIS COMPANY</h3>
+            {% if jobs is defined %}
+            {{  jobs |safe }}
+            {% else %}
+            <p> Company has no current job openings</p>
+            {% end if %}
+        {% else %}
+        <p> Company information not available</p>
     </body>
 </html>
 
