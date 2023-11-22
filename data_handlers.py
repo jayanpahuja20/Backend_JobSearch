@@ -1,4 +1,4 @@
-from typing import Dict, Union, Type, Any
+from typing import Dict, Union, Any
 
 from pymongo import MongoClient
 from models import JobMappingGithubS2, JobMappingKaggleS1, JobMappingGithubS4, JobMappingKaggleS3, \
@@ -48,7 +48,7 @@ def Transform(DatasetName, query):
     Transformed = {}
     for enum_val in DB_Class_Mappings[DatasetName]:
         if (enum_val.value == ""):
-            print(enum_val.value)
+            print ( 'value ',enum_val.value)
             Transformed[enum_val.name] = ""
         else:
             Transformed[enum_val.name] = query[enum_val.value]
@@ -140,23 +140,27 @@ def job_search_results(query_dict: Dict[str, Any]):
             collection_name = key
             
             for enum_val in job_col_mappings[key]:
+
                 if ("" + enum_val.name) in query_dict.keys():
                     if(query_dict["" + enum_val.name]==""):
                         continue
                     if enum_val.value == "":
                         flag = False
                         break
-                    
+
                     query_for_db[enum_val.value] = query_dict["" + enum_val.name]
             
             if flag:
-                print(query_for_db)
+                print('query ', query_for_db)
                 collection = get_DB(collection_name)
+                print('collection ', collection)
                 results = list(collection.find(query_for_db))
+                print('res ', results)
                 if not results:
                     continue
 
                 results = Transform(key, results)
+                print('res1 ', results)
                 if not entity_matching_for_search(results, final_results):
                     final_results.extend(results)
                 else:
@@ -165,6 +169,7 @@ def job_search_results(query_dict: Dict[str, Any]):
         for i in range(0, len(final_results)):
             dump = json.dumps(final_results[i], default=str)
             final_results[i] = json.loads(dump)
+
         return final_results
 
     except Exception as e:
@@ -191,7 +196,7 @@ def company_search_results(query_dict: Dict[str, Any]):
                             continue
                         query_for_db[enum_val.value] = query_dict["" + enum_val.name]
             # print(query_dict)
-            print(query_for_db)
+            print('query ', query_for_db)
             if flag:
                 collection = db[collection_name]
                 results = list(collection.find(query_for_db))
@@ -206,7 +211,7 @@ def company_search_results(query_dict: Dict[str, Any]):
         for i in range(0, len(final_results)):
             dump = json.dumps(final_results[i], default=str)
             final_results[i] = json.loads(dump)
-        print(final_results)
+      
         return final_results
 
     except Exception as e:

@@ -120,7 +120,7 @@ async def search_jobs( request: Request):
     
     #print(job_search_results(new_query))
     df = pd.DataFrame.from_dict(job_search_results(new_query))
-    html = df.to_html( index=False, classes='stocktable', table_id='table1')
+    html = df.to_html( index=False, classes='stocktable', table_id='result')
     html = html.replace('class="dataframe ','class="')  
   #  return templates.TemplateResponse("JobSearch.html", context={"request": request})
     return templates.TemplateResponse("result.html", context={"request": request,"table":html})
@@ -147,11 +147,13 @@ async def search_companies( request: Request):
     print(new_query)
     
     #print(job_search_results(new_query))
-    df = pd.DataFrame.from_dict(company_search_results(new_query))
+    res=company_search_results(new_query)
+    print(res)
+    df = pd.DataFrame.from_dict(res)
     html = df.to_html( index=False, classes='stocktable', table_id='table1')
     html = html.replace('class="dataframe ','class="')  
-     if(df.empty):
-            return templates.TemplateResponse("result_company.html", context={"request": request})
+    if(df.empty):
+        return templates.TemplateResponse("result_company.html", context={"request": request})
 
     job_query={}
     job_query["company_name"]=new_query["name"]
